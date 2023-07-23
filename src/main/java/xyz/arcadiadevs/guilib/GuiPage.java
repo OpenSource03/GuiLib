@@ -1,4 +1,4 @@
-package xyz.arcadiadevs.gensplus.guis.guilib;
+package xyz.arcadiadevs.guilib;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -36,16 +36,16 @@ public class GuiPage {
           }
 
           if ((type == GuiPageType.LAST || type == GuiPageType.SINGLE)
-              && item.type() == GuiItemType.NEXT) {
+              && item.getType() == GuiItemType.NEXT) {
             continue;
           }
 
           if ((type == GuiPageType.FIRST || type == GuiPageType.SINGLE)
-              && item.type() == GuiItemType.PREVIOUS) {
+              && item.getType() == GuiItemType.PREVIOUS) {
             continue;
           }
 
-          inventory.setItem(i * 9 + j, items[i][j].item());
+          inventory.setItem(i * 9 + j, items[i][j].getItem());
         }
       }
     }

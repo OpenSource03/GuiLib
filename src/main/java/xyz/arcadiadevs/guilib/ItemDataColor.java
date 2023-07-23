@@ -1,4 +1,4 @@
-package xyz.arcadiadevs.gensplus.guis.guilib;
+package xyz.arcadiadevs.guilib;
 
 public enum ItemDataColor {
   WHITE((short)0),
@@ -20,7 +20,7 @@ public enum ItemDataColor {
 
   private final short value;
 
-  private ItemDataColor(short value) {
+  ItemDataColor(short value) {
     this.value = value;
   }
 
@@ -29,11 +29,9 @@ public enum ItemDataColor {
   }
 
   public static ItemDataColor getByValue(short value) {
-    ItemDataColor[] var1 = values();
-    int var2 = var1.length;
+    ItemDataColor[] values = values();
 
-    for(int var3 = 0; var3 < var2; ++var3) {
-      ItemDataColor color = var1[var3];
+    for (ItemDataColor color : values) {
       if (value == color.value) {
         return color;
       }

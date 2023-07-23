@@ -1,4 +1,4 @@
-package xyz.arcadiadevs.gensplus.guis.guilib;
+package xyz.arcadiadevs.guilib;
 
 import java.util.Arrays;
 import java.util.List;

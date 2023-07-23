@@ -1,4 +1,4 @@
-package xyz.arcadiadevs.gensplus.guis.guilib;
+package xyz.arcadiadevs.guilib;
 
 public enum GuiItemType {
 

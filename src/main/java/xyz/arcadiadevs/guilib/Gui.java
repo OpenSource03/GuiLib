@@ -1,8 +1,7 @@
-package xyz.arcadiadevs.gensplus.guis.guilib;
+package xyz.arcadiadevs.guilib;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import xyz.arcadiadevs.gensplus.GensPlus;
+import org.bukkit.plugin.Plugin;
 
 public class Gui implements Listener {
 
@@ -18,15 +17,13 @@ public class Gui implements Listener {
 
   @Getter
   private final int rows;
-  private final GensPlus instance;
   private final ArrayList<GuiPage> pages;
 
-  public Gui(String title, int rows, GensPlus instance) {
+  public Gui(String title, int rows, Plugin instance) {
     this.title = title;
     this.rows = rows;
     this.pages = new ArrayList<>();
     addPage();
-    this.instance = instance;
 
     instance.getServer().getPluginManager().registerEvents(this, instance);
   }
@@ -60,7 +57,7 @@ public class Gui implements Listener {
     int row = (slot - page * rows * 9) / 9;
     int column = slot - page * rows * 9 - row * 9;
 
-    if (item.type() != GuiItemType.ITEM && page != 0) {
+    if (item.getType() != GuiItemType.ITEM && page != 0) {
       throw new IllegalArgumentException(
           "Only items can be set on pages other than the first one.");
     }
@@ -78,7 +75,7 @@ public class Gui implements Listener {
         for (int j = 0; j < firstPage.getItems()[i].length; j++) {
           GuiItem item = firstPage.getItems()[i][j];
 
-          if (item.type() != GuiItemType.ITEM) {
+          if (item.getType() != GuiItemType.ITEM) {
             page.getItems()[i][j] = item;
           }
         }
@@ -123,9 +120,11 @@ public class Gui implements Listener {
       return;
     }
 
-    if (!(event.getWhoClicked() instanceof Player player)) {
+    if (!(event.getWhoClicked() instanceof Player)) {
       return;
     }
+
+    Player player = (Player) event.getWhoClicked();
 
     Inventory inventory = event.getClickedInventory();
 
@@ -150,15 +149,16 @@ public class Gui implements Listener {
       return;
     }
 
-    switch (item.type()) {
-      case ITEM, BORDER -> {
-        if (item.action() == null) {
+    switch (item.getType()) {
+      case ITEM:
+      case BORDER:
+        if (item.getAction() == null) {
           return;
         }
 
-        item.action().run();
-      }
-      case NEXT -> {
+        item.getAction().run();
+        break;
+      case NEXT:
         int nextPage = pages.indexOf(page) + 1;
 
         if (nextPage >= pages.size()) {
@@ -166,8 +166,8 @@ public class Gui implements Listener {
         }
 
         player.openInventory(getInventory(nextPage));
-      }
-      case PREVIOUS -> {
+        break;
+      case PREVIOUS:
         int previousPage = pages.indexOf(page) - 1;
 
         if (previousPage < 0) {
@@ -175,9 +175,12 @@ public class Gui implements Listener {
         }
 
         player.openInventory(getInventory(previousPage));
-      }
-      case CLOSE -> player.closeInventory();
-      default -> throw new IllegalStateException("Unexpected value: " + item.type());
+        break;
+      case CLOSE:
+        player.closeInventory();
+        break;
+      default:
+        throw new IllegalStateException("Unexpected value: " + item.getType());
     }
   }
 
