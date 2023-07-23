@@ -1,0 +1,4 @@
+name: GuiLib
+version: '${project.version}'
+main: xyz.arcadiadevs.guilib.GuiLib
+api-version: '1.20'
